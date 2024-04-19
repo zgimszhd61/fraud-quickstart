@@ -132,3 +132,75 @@ Citations:
 [11] https://blog.csdn.net/qq_35591253/article/details/130855842
 [12] https://www.volcengine.com/theme/6948666-R-7-1
 [13] https://www.showmeai.tech/article-detail/138
+
+
+-----
+
+标签传播算法（Label Propagation）是一种半监督学习方法，它可以在Colab上运行。这种算法主要用于图数据，通过节点之间的连接关系传播标签信息，从而实现对未标记数据的分类。下面我将提供一个简单的标签传播算法示例，这个示例可以直接在Google Colab上运行。
+
+### 环境设置
+
+首先，确保你的Colab环境中已经安装了必要的库。如果没有安装，可以使用以下命令安装：
+
+```python
+!pip install numpy matplotlib scikit-learn
+```
+
+### 示例代码
+
+接下来，我们将使用`scikit-learn`库中的`LabelPropagation`模块来实现标签传播算法。这个例子将使用一个简单的合成数据集来演示如何应用标签传播算法。
+
+```python
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn import datasets
+from sklearn.semi_supervised import LabelPropagation
+
+# 生成数据
+X, y = datasets.make_circles(n_samples=200, noise=0.05, random_state=0, factor=0.3)
+
+# 将一部分标签设为未知
+y[50:] = -1  # 假设只有前50个样本的标签是已知的
+
+# 创建标签传播模型
+label_prop_model = LabelPropagation()
+
+# 训练模型
+label_prop_model.fit(X, y)
+
+# 预测结果
+y_pred = label_prop_model.transduction_
+
+# 可视化结果
+plt.figure(figsize=(8, 4))
+plt.subplot(1, 2, 1)
+plt.scatter(X[y != -1, 0], X[y != -1, 1], c=y[y != -1], cmap='viridis', edgecolor='k', s=50, label='Labeled')
+plt.scatter(X[y == -1, 0], X[y == -1, 1], c='gray', label='Unlabeled')
+plt.title("Original data")
+plt.legend()
+
+plt.subplot(1, 2, 2)
+plt.scatter(X[:, 0], X[:, 1], c=y_pred, cmap='viridis', edgecolor='k', s=50)
+plt.title("Label Propagation")
+plt.show()
+```
+
+### 代码解释
+
+1. **数据生成**：使用`make_circles`函数生成一个简单的二维数据集，其中包含两个环形分布。
+2. **标签隐藏**：我们将部分数据的标签设置为未知（-1），模拟半监督学习的场景。
+3. **模型训练**：使用`LabelPropagation`类创建一个标签传播模型，并用已知标签的数据训练它。
+4. **结果预测**：使用训练好的模型对所有数据（包括未标记的数据）进行标签预测。
+5. **结果可视化**：绘制原始数据和标签传播后的结果，以直观展示算法的效果。
+
+这个简单的例子展示了如何在Colab上使用标签传播算法进行半监督学习。你可以直接将这段代码复制到Colab中运行，观察和分析结果。
+
+Citations:
+[1] https://www.cnblogs.com/lfri/p/10478603.html
+[2] https://cloud.tencent.com/developer/article/1454677
+[3] https://www.jiqizhixin.com/articles/2018-10-11-5
+[4] https://www.jiqizhixin.com/articles/2018-10-23-2
+[5] https://developer.aliyun.com/article/1052900
+[6] https://juejin.cn/post/7176246561125449784
+[7] https://blog.csdn.net/weixin_43843172/article/details/109897787
+[8] https://blog.csdn.net/PolarisRisingWar/article/details/118545695
